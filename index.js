@@ -55,9 +55,16 @@ var wss = new WebSocket.Server({
 });
 
 let socketPort;
+let url;
 
-wss.on("connection", function (socket) {
+wss.on("connection", function (socket, req) {
   console.log("A Web Socket connection has been established!");
+
+  if (url && url === req.url) {
+    console.log("websocket already created for this url: " + url);
+    return;
+  }
+  url = req.url;
   socketPort = new osc.WebSocketPort({
     socket: socket,
   });
